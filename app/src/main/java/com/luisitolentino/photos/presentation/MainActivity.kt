@@ -11,8 +11,8 @@ import com.android.volley.toolbox.ImageRequest
 import com.luisitolentino.photos.R
 import com.luisitolentino.photos.presentation.adapter.PhotoAdapter
 import com.luisitolentino.photos.databinding.ActivityMainBinding
-import com.luisitolentino.photos.framework.datasource.DummyJSONAPI
-import com.luisitolentino.photos.data.model.Photo
+import com.luisitolentino.photos.data.repository.DummyJSONAPI
+import com.luisitolentino.photos.domain.entity.Photo
 
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     retrieveImage(photoList[position].thumbnailUrl, amb.imageThumbnail)
-                    retrieveImage(photoList[position].url, amb.imagePhoto)
+                    retrieveImage(photoList[position].image, amb.imagePhoto)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun retrievePhotosList() =
-        DummyJSONAPI.PhototListRequest({ photoList ->
+        DummyJSONAPI.PhotoListRequest({ photoList ->
             photoList.also {
                 photoAdapter.addAll(it)
             }

@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.luisitolentino.photos.data.model.Photo
+import com.luisitolentino.photos.data.model.PhotoResponse
+import com.luisitolentino.photos.domain.entity.Photo
 
 class PhotoAdapter(
     private val activityContext: Context,

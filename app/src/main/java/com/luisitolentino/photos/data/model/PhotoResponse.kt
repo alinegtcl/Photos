@@ -1,13 +1,15 @@
 package com.luisitolentino.photos.data.model
 
-data class Photo(
+import com.luisitolentino.photos.domain.entity.Photo
+
+data class PhotoResponse(
     val albumId: Int,
     val id: Int,
     val thumbnailUrl: String,
     val title: String,
     val url: String
 ) {
-    override fun toString(): String {
-        return title
+    fun toPhoto() : Photo{
+        return Photo(title, thumbnailUrl, url)
     }
 }
