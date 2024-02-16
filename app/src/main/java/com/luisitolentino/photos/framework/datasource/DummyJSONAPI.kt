@@ -1,4 +1,4 @@
-package com.luisitolentino.photos.model
+package com.luisitolentino.photos.framework.datasource
 
 import android.content.Context
 import com.android.volley.NetworkResponse
@@ -10,6 +10,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.luisitolentino.photos.data.model.PhotoList
 import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 import java.net.HttpURLConnection.HTTP_OK
 

@@ -1,4 +1,4 @@
-package com.luisitolentino.photos.model
+package com.luisitolentino.photos.data.model
 
 data class Photo(
     val albumId: Int,

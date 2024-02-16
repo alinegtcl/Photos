@@ -1,4 +1,4 @@
-package com.luisitolentino.photos.ui
+package com.luisitolentino.photos.presentation
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.ImageRequest
 import com.luisitolentino.photos.R
-import com.luisitolentino.photos.adapter.PhotoAdapter
+import com.luisitolentino.photos.presentation.adapter.PhotoAdapter
 import com.luisitolentino.photos.databinding.ActivityMainBinding
-import com.luisitolentino.photos.model.DummyJSONAPI
-import com.luisitolentino.photos.model.Photo
+import com.luisitolentino.photos.framework.datasource.DummyJSONAPI
+import com.luisitolentino.photos.data.model.Photo
 
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
