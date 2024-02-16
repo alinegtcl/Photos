@@ -1,4 +1,4 @@
-package com.luisitolentino.photos.adapter
+package com.luisitolentino.photos.presentation.adapter
 
 import android.R
 import android.content.Context
@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.luisitolentino.photos.model.Photo
+import com.luisitolentino.photos.data.model.PhotoResponse
+import com.luisitolentino.photos.domain.entity.Photo
 
 class PhotoAdapter(
     private val activityContext: Context,

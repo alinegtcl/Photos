@@ -1,4 +1,4 @@
-package com.luisitolentino.photos.model
+package com.luisitolentino.photos.data.repository
 
 import android.content.Context
 import com.android.volley.NetworkResponse
@@ -10,6 +10,8 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.luisitolentino.photos.data.model.PhotoListResponse
+import com.luisitolentino.photos.domain.entity.Photo
 import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 import java.net.HttpURLConnection.HTTP_OK
 
@@ -35,15 +37,15 @@ class DummyJSONAPI(context: Context) {
         requestQueue.add(request)
     }
 
-    class PhototListRequest(
-        private val responseListener: Response.Listener<PhotoList>,
+    class PhotoListRequest(
+        private val responseListener: Response.Listener<List<Photo>>,
         errorListener: ErrorListener
-    ) : Request<PhotoList>(Method.GET, PHOTOS_ENDPOINT, errorListener) {
-        override fun parseNetworkResponse(response: NetworkResponse?): Response<PhotoList> =
+    ) : Request<List<Photo>>(Method.GET, PHOTOS_ENDPOINT, errorListener) {
+        override fun parseNetworkResponse(response: NetworkResponse?): Response<List<Photo>> =
             if (response?.statusCode == HTTP_OK || response?.statusCode == HTTP_NOT_MODIFIED) {
                 String(response.data).run {
                     Response.success(
-                        Gson().fromJson(this, PhotoList::class.java),
+                        Gson().fromJson(this, PhotoListResponse::class.java).toPhotoList(),
                         HttpHeaderParser.parseCacheHeaders(response)
                     )
                 }
@@ -51,8 +53,7 @@ class DummyJSONAPI(context: Context) {
                 Response.error(VolleyError())
             }
 
-
-        override fun deliverResponse(response: PhotoList?) {
+        override fun deliverResponse(response: List<Photo>?) {
             responseListener.onResponse(response)
         }
     }
