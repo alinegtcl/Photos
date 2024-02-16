@@ -6,18 +6,18 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.luisitolentino.photos.R
-import com.luisitolentino.photos.adapter.ProductAdapter
+import com.luisitolentino.photos.adapter.PhotoAdapter
 import com.luisitolentino.photos.databinding.ActivityMainBinding
 import com.luisitolentino.photos.model.DummyJSONAPI
-import com.luisitolentino.photos.model.Product
+import com.luisitolentino.photos.model.Photo
 
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private val productList: MutableList<Product> = mutableListOf()
-    private val productAdapter: ProductAdapter by lazy {
-        ProductAdapter(this, productList)
+    private val photoList: MutableList<Photo> = mutableListOf()
+    private val photoAdapter: PhotoAdapter by lazy {
+        PhotoAdapter(this, photoList)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
             title = getString(R.string.app_name)
         })
 
-        amb.productsSp.apply {
-            adapter = productAdapter
+        amb.photosSp.apply {
+            adapter = photoAdapter
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    retrieveProductImages(productList[position])
+                    retrieveImage(photoList[position])
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -47,13 +47,13 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        retrieveProducts()
+        retrievePhotosList()
     }
 
-    private fun retrieveProducts() =
-        DummyJSONAPI.ProductListRequest({ productList ->
-            productList.products.also {
-                productAdapter.addAll(it)
+    private fun retrievePhotosList() =
+        DummyJSONAPI.PhototListRequest({ photoList ->
+            photoList.also {
+                photoAdapter.addAll(it)
             }
         }, {
             Toast.makeText(
@@ -65,25 +65,7 @@ class MainActivity : AppCompatActivity() {
             DummyJSONAPI.getInstance(this).addToRequestQueue(it)
         }
 
-    private fun retrieveProductImages(product: Product) {
-//        product.images.forEach { imageUrl ->
-//            ImageRequest(
-//                imageUrl,
-//                { response ->
-//                },
-//                0,
-//                0,
-//                ImageView.ScaleType.CENTER,
-//                Bitmap.Config.ARGB_8888,
-//                {
-//                    Toast.makeText(
-//                        this,
-//                        getString(R.string.request_problem),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }).also {
-//                DummyJSONAPI.getInstance(this).addToRequestQueue(it)
-//            }
-//        }
+    private fun retrieveImage(item: Photo) {
+        // implementar chamada para exibir as fotos
     }
 }

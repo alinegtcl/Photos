@@ -1,0 +1,28 @@
+package com.luisitolentino.photos.adapter
+
+import android.R
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import com.luisitolentino.photos.model.Photo
+
+class PhotoAdapter(
+    private val activityContext: Context,
+    private val photoList: MutableList<Photo>
+) : ArrayAdapter<Photo>(activityContext, R.layout.simple_list_item_1, photoList) {
+    private data class PhototHolder(val photoTitleTV: TextView)
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val photoView = convertView ?: LayoutInflater.from(activityContext)
+            .inflate(R.layout.simple_list_item_1, parent, false).apply {
+                tag = PhototHolder(findViewById(R.id.text1))
+            }
+
+        (photoView.tag as PhototHolder).photoTitleTV.text = photoList[position].title
+
+        return photoView
+    }
+}
