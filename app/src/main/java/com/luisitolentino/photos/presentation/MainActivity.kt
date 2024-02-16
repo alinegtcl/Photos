@@ -9,13 +9,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.ImageRequest
 import com.luisitolentino.photos.R
-import com.luisitolentino.photos.presentation.adapter.PhotoAdapter
-import com.luisitolentino.photos.databinding.ActivityMainBinding
 import com.luisitolentino.photos.data.repository.DummyJSONAPI
+import com.luisitolentino.photos.databinding.ActivityMainBinding
 import com.luisitolentino.photos.domain.entity.Photo
+import com.luisitolentino.photos.presentation.adapter.PhotoAdapter
 
 class MainActivity : AppCompatActivity() {
-    private val amb: ActivityMainBinding by lazy {
+    private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val photoList: MutableList<Photo> = mutableListOf()
@@ -25,13 +25,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(amb.root)
+        setContentView(binding.root)
 
-        setSupportActionBar(amb.mainTb.apply {
+        sutupAppBar()
+        setupRecycler()
+
+        // Chamar view model para trazer lista de fotos
+        retrievePhotosList()
+    }
+
+    private fun sutupAppBar() {
+        setSupportActionBar(binding.mainTb.apply {
             title = getString(R.string.app_name)
         })
+    }
 
-        amb.photosSp.apply {
+    private fun setupRecycler() {
+        binding.photosSp.apply {
             adapter = photoAdapter
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -40,17 +50,14 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    retrieveImage(photoList[position].thumbnailUrl, amb.imageThumbnail)
-                    retrieveImage(photoList[position].image, amb.imagePhoto)
+                    // Chamar viewModel para requisição de imagem
+                    retrieveImage(photoList[position].thumbnailUrl, binding.imageThumbnail)
+                    retrieveImage(photoList[position].image, binding.imagePhoto)
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // NSA
-                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
-
-        retrievePhotosList()
     }
 
     private fun retrievePhotosList() =
