@@ -1,10 +1,13 @@
 package com.luisitolentino.photos.ui
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.toolbox.ImageRequest
 import com.luisitolentino.photos.R
 import com.luisitolentino.photos.adapter.PhotoAdapter
 import com.luisitolentino.photos.databinding.ActivityMainBinding
@@ -37,14 +40,14 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    retrieveImage(photoList[position])
+                    retrieveImage(photoList[position].thumbnailUrl, amb.imageThumbnail)
+                    retrieveImage(photoList[position].url, amb.imagePhoto)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     // NSA
                 }
             }
-
         }
 
         retrievePhotosList()
@@ -65,7 +68,24 @@ class MainActivity : AppCompatActivity() {
             DummyJSONAPI.getInstance(this).addToRequestQueue(it)
         }
 
-    private fun retrieveImage(item: Photo) {
-        // implementar chamada para exibir as fotos
+    private fun retrieveImage(imageUrl: String, view: ImageView) {
+        ImageRequest(
+            imageUrl,
+            { response ->
+                view.setImageBitmap(response)
+            },
+            0,
+            0,
+            ImageView.ScaleType.CENTER,
+            Bitmap.Config.ARGB_8888,
+            {
+                Toast.makeText(
+                    this,
+                    getString(R.string.request_problem),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }).also {
+            DummyJSONAPI.getInstance(this).addToRequestQueue(it)
+        }
     }
 }
