@@ -11,7 +11,7 @@ import com.luisitolentino.photos.domain.entity.Photo
 
 class PhotoAdapter(
     private val activityContext: Context,
-    private val photoList: MutableList<Photo>
+    private val photoList: List<Photo>
 ) : ArrayAdapter<Photo>(activityContext, R.layout.simple_list_item_1, photoList) {
     private data class PhotoHolder(val photoTitleTV: TextView)
 
