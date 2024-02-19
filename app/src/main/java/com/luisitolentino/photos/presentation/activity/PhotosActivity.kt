@@ -27,7 +27,7 @@ class PhotosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupAppBar()
-        viewModel.retrievePhotosList(this)
+        viewModel.retrievePhotosList()
         setupViewModel()
     }
 
@@ -57,8 +57,8 @@ class PhotosActivity : AppCompatActivity() {
     }
 
     private fun retrieveImages(photo: Photo) {
-        viewModel.retrieveThumbnail(photo.thumbnailUrl, this@PhotosActivity)
-        viewModel.retrieveImage(photo.image, this@PhotosActivity)
+        viewModel.retrieveThumbnail(photo.thumbnailUrl)
+        viewModel.retrieveImage(photo.image)
     }
 
     private fun setupViewModel() {

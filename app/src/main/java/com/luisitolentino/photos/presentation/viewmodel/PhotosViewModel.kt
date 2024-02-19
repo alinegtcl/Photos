@@ -1,70 +1,90 @@
 package com.luisitolentino.photos.presentation.viewmodel
 
-import android.graphics.Bitmap
-import android.widget.ImageView
 import androidx.lifecycle.ViewModel
-import com.android.volley.toolbox.ImageRequest
-import com.luisitolentino.photos.data.repository.DummyJSONAPI
-import com.luisitolentino.photos.presentation.activity.PhotosActivity
+import androidx.lifecycle.viewModelScope
+import com.luisitolentino.photos.domain.usecase.PhotosUseCase
+import com.luisitolentino.photos.domain.utils.flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class PhotosViewModel : ViewModel() {
+class PhotosViewModel(private val useCase: PhotosUseCase) : ViewModel() {
 
     private val _state = MutableStateFlow<PhotoState>(PhotoState.HideLoading)
     val state = _state.asStateFlow()
 
-    fun retrievePhotosList(photosActivity: PhotosActivity) {
-        _state.value = PhotoState.ShowLoading
-        DummyJSONAPI.PhotoListRequest({ photoList ->
-            _state.value = PhotoState.HideLoading
-            _state.value = PhotoState.PhotoSuccess(photoList)
-        }, {
-            _state.value = PhotoState.HideLoading
-            _state.value = PhotoState.PhotoError(it.message ?: "deu ruim")
-        }).also {
-            DummyJSONAPI.getInstance(photosActivity).addToRequestQueue(it)
+    fun retrievePhotosList() {
+        viewModelScope.launch {
+            _state.value = PhotoState.ShowLoading
+            val result = useCase.retrievePhotosList()
+            result.flow({ photoList ->
+                _state.value = PhotoState.HideLoading
+                _state.value = PhotoState.PhotoSuccess(photoList)
+            }, { errorMessage ->
+                _state.value = PhotoState.HideLoading
+                _state.value = PhotoState.PhotoError(errorMessage)
+            })
         }
     }
 
-    fun retrieveImage(imageUrl: String, photosActivity: PhotosActivity) {
+    fun retrieveImage(imageUrl: String) {
         _state.value = PhotoState.ShowLoading
-        ImageRequest(
-            imageUrl,
-            { image ->
+        viewModelScope.launch {
+            val result = useCase.retrievePhoto(imageUrl)
+            result.flow({ image ->
                 _state.value = PhotoState.HideLoading
                 _state.value = PhotoState.ImageSuccess(image)
-            },
-            0,
-            0,
-            ImageView.ScaleType.CENTER,
-            Bitmap.Config.ARGB_8888,
-            {
+            }, { errorMessage ->
                 _state.value = PhotoState.HideLoading
-                _state.value = PhotoState.PhotoError(it.message ?: "deu ruim")
-            }).also {
-            DummyJSONAPI.getInstance(photosActivity).addToRequestQueue(it)
+                _state.value = PhotoState.PhotoError(errorMessage)
+            })
         }
+//        ImageRequest(
+//            imageUrl,
+//            { image ->
+//                _state.value = PhotoState.HideLoading
+//                _state.value = PhotoState.ImageSuccess(image)
+//            },
+//            0,
+//            0,
+//            ImageView.ScaleType.CENTER,
+//            Bitmap.Config.ARGB_8888,
+//            {
+//                _state.value = PhotoState.HideLoading
+//                _state.value = PhotoState.PhotoError(it.message ?: "deu ruim")
+//            }).also {
+//            PhotosService.getInstance(photosActivity).addToRequestQueue(it)
+//        }
     }
 
-    fun retrieveThumbnail(imageUrl: String, photosActivity: PhotosActivity) {
+    fun retrieveThumbnail(imageUrl: String) {
         _state.value = PhotoState.ShowLoading
-        ImageRequest(
-            imageUrl,
-            { image ->
+        viewModelScope.launch {
+            val result = useCase.retrievePhoto(imageUrl)
+            result.flow({ image ->
                 _state.value = PhotoState.HideLoading
                 _state.value = PhotoState.ThumbnailSuccess(image)
-            },
-            0,
-            0,
-            ImageView.ScaleType.CENTER,
-            Bitmap.Config.ARGB_8888,
-            {
+            }, { errorMessage ->
                 _state.value = PhotoState.HideLoading
-                _state.value = PhotoState.PhotoError(it.message ?: "deu ruim")
-            }).also {
-            DummyJSONAPI.getInstance(photosActivity).addToRequestQueue(it)
+                _state.value = PhotoState.PhotoError(errorMessage)
+            })
         }
+//        ImageRequest(
+//            imageUrl,
+//            { image ->
+//                _state.value = PhotoState.HideLoading
+//                _state.value = PhotoState.ThumbnailSuccess(image)
+//            },
+//            0,
+//            0,
+//            ImageView.ScaleType.CENTER,
+//            Bitmap.Config.ARGB_8888,
+//            {
+//                _state.value = PhotoState.HideLoading
+//                _state.value = PhotoState.PhotoError(it.message ?: "deu ruim")
+//            }).also {
+//            PhotosService.getInstance(photosActivity).addToRequestQueue(it)
+//        }
     }
 
 }
